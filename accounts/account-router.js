@@ -4,9 +4,17 @@ const db = require('../data/dbConfig');
 
 router.get('/', (req, res) => {
     
-    db("accounts").select()
-    .limit(req.query.limit)
-    .orderBy(req.query.sortby, req.query.sortdir)
+    let accountQuery = db("accounts");
+
+    if(req.query.limit) {
+        accountQuery = accountQuery.limit(req.query.limit)
+    }
+
+    if(req.query.sortby) {
+        accountQuery = accountQuery.orderBy(req.query.sortby, req.query.sortdir)
+    }
+
+    accountQuery
         .then(accounts => res.status(200).json(accounts))
         .catch(err => {
             console.log(err)
